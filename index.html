@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Australian Cities: Population and CPI (2001-2024)</title>
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+
+  <style>
+    :root{
+      --bg: #f6f8fb;
+      --paper: #ffffff;
+      --ink: #15223b;
+      --muted: #52607a;
+      --accent: #4067b1;
+      --accent-2:#d36c6c;
+      --card-shadow: 0 10px 25px rgba(18, 34, 60, .08);
+      --border: #e6e9f1;
+      --stripe: #eef3f9;
+      --glass: rgba(255,255,255,.65);
+    }
+    .midnight{
+      --bg: #0f1422;
+      --paper: #151c2c;
+      --ink: #e8edf7;
+      --muted: #a9b7d4;
+      --accent: #6ea8ff;
+      --accent-2:#ff9d8f;
+      --card-shadow: 0 12px 28px rgba(0,0,0,.35);
+      --border: #26314a;
+      --stripe: #0b101d;
+      --glass: rgba(21,28,44,.45);
+    }
+
+    html,body{height:100%}
+    body{
+      font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: linear-gradient(180deg, var(--bg), var(--stripe) 700px, var(--bg) 1400px);
+      color: var(--ink);
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 56px 40px 60px;
+      line-height: 1.72;
+    }
+
+    h1{
+      font-family: "Merriweather", Georgia, serif;
+      font-weight: 800;
+      font-size: 36px;
+      letter-spacing: .2px;
+      margin: 0 0 10px;
+      color: var(--ink);
+    }
+
+    .intro{
+      font-size: 18px; color: var(--muted); margin: 6px 0 24px;
+    }
+
+    .sticky{
+      position: sticky; top: 14px; z-index: 40;
+      backdrop-filter: saturate(140%) blur(8px);
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 14px;
+      display: flex; align-items: center; gap: 12px;
+      box-shadow: var(--card-shadow);
+      margin-bottom: 22px;
+    }
+    .toggle{
+      margin-left: auto; cursor:pointer; font-weight:700; color: var(--accent);
+      user-select:none
+    }
+
+    .section{
+      display: grid; grid-template-columns: 1.1fr 1.1fr; gap: 42px; align-items: center;
+      margin: 46px 0 80px;
+    }
+    .section h2{
+      font-family: "Merriweather", Georgia, serif;
+      font-size: 24px; font-weight: 800; color: var(--ink);
+      margin: 0 0 12px; position: relative; display: inline-block;
+    }
+    .section h2:after{
+      content:"";
+      position:absolute; left:0; right:-4px; bottom:-6px; height:6px;
+      background: linear-gradient(90deg, var(--accent), transparent 70%);
+      border-radius: 6px; opacity: .8;
+    }
+    .section p{ font-size: 16px; color: var(--muted); margin: 0 0 14px; }
+
+    .story-box{
+      background: var(--story-bg);
+      border: 1px solid var(--story-border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      box-shadow: var(--card-shadow);
+      color: var(--story-ink);
+    }
+    .story-box h2{ color: var(--story-ink); }
+    .story-box p{ color: var(--story-muted); }
+    .story-box ul{ margin: 8px 0 0 18px; color: var(--story-muted); }
+    .story-box li{ margin: 4px 0; }
+
+    .chart{
+      background: var(--paper);
+      border:1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: var(--card-shadow);
+      padding: 20px;
+      position: relative;
+      padding-top: 80px;
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+    .chart:hover{ transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,.10) }
+
+    .chart .vega-bindings{
+      position: absolute; top: 16px; left: 12px; right: 12px;
+      display: inline-flex; align-items: center; gap: 12px;
+      background: var(--glass); border: 1px solid var(--border);
+      border-radius: 12px; padding: 8px 12px;
+      padding-left: 96px;
+      backdrop-filter: saturate(140%) blur(8px);
+      box-shadow: var(--card-shadow);
+      z-index: 5 !important;
+    }
+    .chart .vega-bindings select{
+      padding: 6px 10px; border-radius: 8px; border:1px solid var(--border);
+      background: var(--paper); color: var(--ink);
+      min-width: 150px;
+    }
+    .chart .vega-bindings label{
+      display: inline-block !important;
+      font-weight: 600;
+      margin-right: 5px;
+    }
+
+    .chart::before{
+      content: attr(data-label);
+      position: absolute; top: 26px; left: 60px;
+      font-size: 12px; font-weight: 700; letter-spacing: .3px; color:#fff;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      padding: 4px 10px; border-radius: 999px;
+      z-index: 6 !important;
+    }
+
+    .reveal{ opacity:0; transform: translateY(12px); transition: opacity .6s ease, transform .6s ease }
+    .reveal.in{ opacity:1; transform: translateY(0) }
+
+    footer{
+      border-top: 1px solid var(--border);
+      padding-top: 18px; margin-top: 22px;
+      font-size: 14px; color: var(--muted);
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Australian Cities: Population and CPI (2001-2024)</h1>
+  <p class="intro">
+    Over the last two decades, Australia's major cities have evolved in both size and cost of living.
+    This visual story pairs population with Customer Price Index (All Groups) from 2001 to 2024, revealing the tempo and geography of change.
+    Each chart includes its own control for focused exploration.
+  </p>
+
+  <div class="sticky">
+    <div class="toggle" id="themeToggle">● Midnight</div>
+  </div>
+
+  <div class="section story">
+    <div class="story-box">
+      <h2>Why This Story</h2>
+      <p>
+        Every city tells its own story of growth and cost. Over the past two decades, Australia's capitals have expanded
+        in both population and living expenses — yet not all at the same pace. This page explores <strong>how urban growth
+        and inflation intertwine</strong> from 2001 to 2024, revealing where prosperity concentrated and where life became
+        more expensive.
+      </p>
+      <p>
+        Population shows opportunity; Customer Price Index shows affordability. Seeing them side by side reveals how the promise of a city can shift with its price.
+      </p>
+    </div>
+    <div class="story-box">
+      <h2>About the Data</h2>
+      <p><strong>Australian Bureau of Statistics (ABS)</strong> sources:</p>
+      <ul>
+        <li><em>Consumer Price Index (All Groups)</em></li>
+        <li><em>Capital City Population Estimates, 2001-2024</em></li>
+      </ul>
+      <p>
+        Datasets were cleaned and aligned for consistency. CPI follows ABS index conventions; population is rounded to the nearest thousand.
+        Aligning both series allows a clear view of how economies and demographics evolve together.
+      </p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="reveal">
+      <h2>Rising Cities</h2>
+      <p>
+        Population growth is uneven across capitals. Sydney and Melbourne act as strong magnets, while Hobart and Darwin progress at a steadier pace.
+        Toggle the year and watch the dashed marker track each city's path — a long upward slope shows deepening urban concentration.
+      </p>
+      <p>
+        The y-axis uses thousands separators to make comparisons easier. Use the city dropdown inside the chart to change perspective.
+      </p>
+      <p>
+        Together, these lines chart migration, opportunity, and ambition — fast-rising metros attract people;
+        steady risers show quieter, durable growth.
+      </p>
+    </div>
+    <div class="chart reveal" id="population" data-label="City"></div>
+  </div>
+
+  <div class="section">
+    <div class="reveal">
+      <h2>Inflation and Momentum</h2>
+      <p>
+        CPI trends rise persistently, with a clear step-up after 2020. The line chart shows how price levels accelerated nationwide,
+        yet local patterns remain distinctive — Perth and Darwin sometimes diverge from the eastern capitals due to housing and energy.
+      </p>
+      <p>
+        The dashed year marker helps compare pre- and post-shock periods easily.
+      </p>
+      <p>
+        Inflation's post-2020 surge is a shared national experience — but its impact varies by city, reflecting different economic structures.
+      </p>
+    </div>
+    <div class="chart reveal" id="cpi" data-label="City"></div>
+  </div>
+
+  <div class="section">
+    <div class="reveal">
+      <h2>Comparing Price Levels</h2>
+      <p>
+        The bar chart compares CPI by city for the selected year. Colours mirror the map's palette: “high” and “low” remain consistent across views.
+        During mining booms, Perth climbs higher; Canberra and Hobart stay moderate.
+      </p>
+      <p>
+        These bars translate lived experience into data — each uptick hints at a tighter household budget.
+      </p>
+    </div>
+    <div class="chart reveal" id="cpi_compare" data-label="Year"></div>
+  </div>
+
+  <div class="section">
+    <div class="reveal">
+      <h2>Mapping Population and Prices</h2>
+      <p>
+        The map combines both measures: circle size encodes population, colour encodes CPI. Larger, warmer-toned circles cluster along the east coast.
+        Smaller, cooler ones mark regions with lighter populations and milder prices. Adjust the year to see spatial patterns shift.
+      </p>
+      <p>
+        Where people gather, prices climb — a visual truth about cities that continues to define Australia's geography.
+      </p>
+    </div>
+    <div class="chart reveal" id="map" data-label="Year"></div>
+  </div>
+
+  <div class="section story">
+    <div class="story-box">
+      <h2>Key Takeaways</h2>
+      <p>
+        The data tells a layered story: cities don't just grow — they <strong>transform</strong>.
+        Sydney and Melbourne capture both people and price pressure, reflecting the nation's continuing urban pull.
+        Smaller capitals grow quietly, balancing affordability with slower opportunity.
+      </p>
+      <p>
+        Inflation's surge after 2020 left few untouched, yet its uneven spread reminds us that
+        <strong>local structure matters</strong> — housing, energy, and industries shape how each city experiences the same event.
+      </p>
+      <p>
+        This tension between <strong>population gravity and price strain</strong> will continue shaping how Australians live, move, and spend.
+        Behind every number lies a story of adaptation — and that story is still being written.
+      </p>
+    </div>
+  </div>
+
+  <footer>
+    Data sources: Australian Bureau of Statistics (ABS) - CPI Table and Capital City Population 2001-2024.  
+    Map base: Natural Earth (Public Domain).  
+    © 2025 Zhongran Li | Built with Vega-Lite v5 | Monash University FIT3179 Data Visualisation 2
+  </footer>
+
+  <script>
+    const specs = [
+      ['population', 'specs/population.json'],
+      ['cpi', 'specs/cpi.json'],
+      ['cpi_compare', 'specs/cpi_compare.json'],
+      ['map', 'specs/map.json']
+    ];
+    Promise.all(specs.map(([id, path]) => vegaEmbed('#' + id, path, { actions: false })));
+
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { rootMargin: '0px 0px -10% 0px', threshold: .08 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    const tgl = document.getElementById('themeToggle');
+    tgl.addEventListener('click', () => {
+      document.body.classList.toggle('midnight');
+      tgl.textContent = document.body.classList.contains('midnight') ? '◐ Light' : '● Midnight';
+    });
+  </script>
+</body>
+</html>

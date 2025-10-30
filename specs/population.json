@@ -1,0 +1,40 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Population over time for selected city",
+  "width": 400,
+  "height": 200,
+  "data": { "url": "../data/city_population.csv" },
+  "params": [
+    {
+      "name": "city_sel",
+      "value": "Sydney",
+      "bind": {
+        "input": "select",
+        "options": [
+          "Sydney",
+          "Melbourne",
+          "Brisbane",
+          "Adelaide",
+          "Perth",
+          "Hobart",
+          "Darwin"
+        ],
+        "name": ": "
+      }
+    }
+  ],
+  "transform": [
+    { "filter": "datum.City == city_sel" }
+  ],
+  "mark": { "type": "line", "point": true },
+  "encoding": {
+    "x": { "field": "Year", "type": "quantitative", "title": "Year" },
+    "y": { "field": "Population", "type": "quantitative", "title": "Population" },
+    "tooltip": [
+      { "field": "City" },
+      { "field": "Year", "title": "Year" },
+      { "field": "Population", "type": "quantitative", "format": "," }
+    ]
+  },
+  "title": "Population over time (2001-2024)"
+}

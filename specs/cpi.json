@@ -1,0 +1,37 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "CPI (All groups) over time for selected city",
+  "width": 400,
+  "height": 200,
+  "data": { "url": "../data/cpi_city_year.csv" },
+  "params": [
+    {
+      "name": "city_sel",
+      "value": "Sydney",
+      "bind": {
+        "input": "select",
+        "options": [
+          "Sydney","Melbourne","Brisbane","Adelaide",
+          "Perth","Hobart","Darwin","Canberra"
+        ],
+        "name": ": "
+      }
+    }
+  ],
+  "transform": [
+    { "filter": "datum.City == city_sel" },
+    { "calculate": "toNumber(datum.Year)", "as": "YearNum" }
+  ],
+  "mark": { "type": "line", "point": true },
+  "encoding": {
+    "x": { "field": "YearNum", "type": "quantitative", "title": "Year", "axis": { "format": "d" } },
+    "y": { "field": "CPI", "type": "quantitative", "title": "CPI index (All groups)" },
+    "color": { "value": "#d94841" },
+    "tooltip": [
+      { "field": "City" },
+      { "field": "Year", "title": "Year" },
+      { "field": "CPI", "title": "CPI index" }
+    ]
+  },
+  "title": "CPI (All groups) over time (2001-2024)"
+}

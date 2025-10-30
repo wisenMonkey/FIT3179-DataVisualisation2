@@ -1,0 +1,97 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Map showing population (size) and CPI (color) of Australian cities for selected year",
+  "width": 900,
+  "height": 600,
+  "params": [
+    {
+      "name": "year_sel",
+      "value": 2024,
+      "bind": {
+        "input": "select",
+        "name": ": ",
+        "options": [
+          2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,
+          2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,
+          2021,2022,2023,2024
+        ]
+      }
+    }
+  ],
+
+  "projection": { "type": "mercator" },
+
+  "layer": [
+    {
+      "data": {
+        "url": "../data/aus.topo.json",
+        "format": { "type": "topojson", "feature": "australia" }
+      },
+      "mark": { "type": "geoshape", "fill": "#eef3f7", "stroke": "#9bb3c5" }
+    },
+    {
+      "data": { "values": [
+        {"City": "Sydney", "Lat": -33.8688, "Lon": 151.2093},
+        {"City": "Melbourne", "Lat": -37.8136, "Lon": 144.9631},
+        {"City": "Brisbane", "Lat": -27.4698, "Lon": 153.0251},
+        {"City": "Adelaide", "Lat": -34.9285, "Lon": 138.6007},
+        {"City": "Perth", "Lat": -31.9523, "Lon": 115.8613},
+        {"City": "Hobart", "Lat": -42.8821, "Lon": 147.3272},
+        {"City": "Darwin", "Lat": -12.4634, "Lon": 130.8456},
+        {"City": "Canberra", "Lat": -35.2809, "Lon": 149.13}
+      ]},
+
+      "transform": [
+        { "calculate": "datum.City + '-' + toString(year_sel)", "as": "CityYear" },
+
+        { "lookup": "CityYear",
+          "from": {
+            "data": { "url": "../data/city_population.csv" },
+            "key": "CityYear",
+            "fields": ["Population"]
+          }
+        },
+
+        { "lookup": "CityYear",
+          "from": {
+            "data": { "url": "../data/cpi_city_year.csv" },
+            "key": "CityYear",
+            "fields": ["CPI"]
+          }
+        },
+
+        { "filter": "isValid(datum.Population)" }
+      ],
+
+      "mark": { "type": "circle", "opacity": 0.95, "stroke": "white", "strokeWidth": 1 },
+
+      "encoding": {
+        "longitude": { "field": "Lon", "type": "quantitative" },
+        "latitude":  { "field": "Lat", "type": "quantitative" },
+        "size": {
+          "field": "Population",
+          "type": "quantitative",
+          "title": "Population",
+          "scale": { "type": "sqrt", "range": [60, 1600] }
+        },
+        "color": {
+          "field": "CPI",
+          "type": "quantitative",
+          "title": "CPI index (All groups)",
+          "scale": {
+            "type": "threshold",
+            "domain": [80,95,110,125,140],
+            "range": ["#5b8bd3","#73c0de","#6bc86b","#f0c36d","#f28e2b","#d36c6c"]
+          }
+        },
+        "tooltip": [
+          { "field": "City" },
+          { "field": "Population", "type": "quantitative", "format": "," },
+          { "field": "CPI", "type": "quantitative", "title": "CPI index" }
+        ]
+      }
+    }
+  ],
+
+  "title": "Population & CPI Map (2001-2024)"
+}
