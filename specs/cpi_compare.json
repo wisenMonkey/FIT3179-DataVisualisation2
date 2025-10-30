@@ -3,7 +3,10 @@
   "description": "City comparison: CPI index by selected year",
   "width": 600,
   "height": 400,
-  "data": { "url": "../data/cpi_city_year.csv" },
+  "data": { 
+  "url": "https://wisenmonkey.github.io/FIT3179-DataVisualisation2/data/cpi_city_year.csv",
+  "format": { "type": "csv" }
+},
 
   "params": [
     {
