@@ -3,7 +3,7 @@
   "description": "Population over time for selected city",
   "width": 400,
   "height": 200,
-  "data": { "url": "../data/city_population.csv" },
+  "data": { "url": "data/city_population.csv" },
   "params": [
     {
       "name": "city_sel",
