@@ -23,12 +23,13 @@
   ],
   "transform": [
     { "filter": "datum.City == city_sel" },
-    { "calculate": "toNumber(datum.Year)", "as": "YearNum" }
+    { "calculate": "toNumber(datum.Year)", "as": "YearNum" },
+    { "calculate": "toNumber(datum.CPI)",  "as": "CPINum" }
   ],
   "mark": { "type": "line", "point": true },
   "encoding": {
     "x": { "field": "YearNum", "type": "quantitative", "title": "Year", "axis": { "format": "d" } },
-    "y": { "field": "CPI", "type": "quantitative", "title": "CPI index (All groups)" },
+    "y": { "field": "CPINum", "type": "quantitative", "title": "CPI index (All groups)" },
     "color": { "value": "#d94841" },
     "tooltip": [
       { "field": "City" },
