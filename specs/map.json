@@ -24,7 +24,7 @@
   "layer": [
     {
       "data": {
-        "url": "../data/aus.topo.json",
+        "url": "https://wisenmonkey.github.io/FIT3179-DataVisualisation2/data/aus.topo.json",
         "format": { "type": "topojson", "feature": "australia" }
       },
       "mark": { "type": "geoshape", "fill": "#eef3f7", "stroke": "#9bb3c5" }
@@ -46,7 +46,10 @@
 
         { "lookup": "CityYear",
           "from": {
-            "data": { "url": "../data/city_population.csv" },
+            "data": { 
+              "url": "https://wisenmonkey.github.io/FIT3179-DataVisualisation2/data/city_population.csv",
+              "format": { "type": "csv" }
+            },
             "key": "CityYear",
             "fields": ["Population"]
           }
@@ -54,7 +57,10 @@
 
         { "lookup": "CityYear",
           "from": {
-            "data": { "url": "../data/cpi_city_year.csv" },
+            "data": { 
+               "url": "https://wisenmonkey.github.io/FIT3179-DataVisualisation2/data/cpi_city_year.csv",
+               "format": { "type": "csv" }
+            },
             "key": "CityYear",
             "fields": ["CPI"]
           }
