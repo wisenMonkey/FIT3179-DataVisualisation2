@@ -6,7 +6,7 @@ It highlights the relationship between **urban expansion** and **cost of living*
 
 ## Data Sources
 - **Australian Bureau of Statistics (ABS)**
-  - Table 6401.0 – Consumer Price Index (All Groups)
+  - Consumer Price Index (All Groups)
   - Capital City Population Estimates (2001–2024)
 - **Map base**: Natural Earth (Public Domain)
 
