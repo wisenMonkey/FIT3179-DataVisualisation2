@@ -3,7 +3,10 @@
   "description": "CPI (All groups) over time for selected city",
   "width": 400,
   "height": 200,
-  "data": { "url": "../data/cpi_city_year.csv" },
+  "data": { 
+  "url": "https://wisenmonkey.github.io/FIT3179-DataVisualisation2/data/cpi_city_year.csv",
+  "format": { "type": "csv" }
+},
   "params": [
     {
       "name": "city_sel",
