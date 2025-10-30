@@ -3,7 +3,7 @@
   "description": "Population over time for selected city",
   "width": 400,
   "height": 200,
-  "data": { "url": "data/city_population.csv" },
+  "data": { "url": "../data/city_population.csv" },
   "params": [
     {
       "name": "city_sel",
@@ -24,7 +24,9 @@
     }
   ],
   "transform": [
-    { "filter": "datum.City == city_sel" }
+    { "filter": "datum.City == city_sel" },
+    { "calculate": "toNumber(datum.Year)", "as": "YearNum" },
+    { "calculate": "toNumber(replace(datum.Population, ',', ''))", "as": "PopNum" }
   ],
   "mark": { "type": "line", "point": true },
   "encoding": {
