@@ -3,22 +3,14 @@
   "description": "Population over time for selected city",
   "width": 400,
   "height": 200,
-  "data": { "url": "../data/city_population.csv" },
+  "data": { "url": "../data/city_population.csv", "format": {"type": "csv"} },
   "params": [
     {
       "name": "city_sel",
       "value": "Sydney",
       "bind": {
         "input": "select",
-        "options": [
-          "Sydney",
-          "Melbourne",
-          "Brisbane",
-          "Adelaide",
-          "Perth",
-          "Hobart",
-          "Darwin"
-        ],
+        "options": ["Sydney","Melbourne","Brisbane","Adelaide","Perth","Hobart","Darwin"],
         "name": ": "
       }
     }
@@ -30,12 +22,12 @@
   ],
   "mark": { "type": "line", "point": true },
   "encoding": {
-    "x": { "field": "Year", "type": "quantitative", "title": "Year" },
-    "y": { "field": "Population", "type": "quantitative", "title": "Population" },
+    "x": { "field": "YearNum", "type": "quantitative", "title": "Year", "axis": {"format": "d"} },
+    "y": { "field": "PopNum",  "type": "quantitative", "title": "Population" },
     "tooltip": [
       { "field": "City" },
-      { "field": "Year", "title": "Year" },
-      { "field": "Population", "type": "quantitative", "format": "," }
+      { "field": "YearNum", "title": "Year" },
+      { "field": "PopNum", "title": "Population", "type": "quantitative", "format": "," }
     ]
   },
   "title": "Population over time (2001-2024)"
