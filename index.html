@@ -285,10 +285,10 @@
 
   <script>
     const specs = [
-      ['population', 'specs/population.json'],
-      ['cpi', 'specs/cpi.json'],
-      ['cpi_compare', 'specs/cpi_compare.json'],
-      ['map', 'specs/map.json']
+      ['population', './specs/population.json'],
+      ['cpi', './specs/cpi.json'],
+      ['cpi_compare', './specs/cpi_compare.json'],
+      ['map', './specs/map.json']
     ];
     Promise.all(specs.map(([id, path]) => vegaEmbed('#' + id, path, { actions: false })));
 
